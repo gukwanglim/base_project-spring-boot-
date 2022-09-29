@@ -1,0 +1,45 @@
+1. spring boot 응용 프로그램 또는 확정에 설치해야 하는 모든 java 응용 프로그램을 개발하기 위해 vscode에서 java extension pack을 설치.(사진 1번)
+    이 확장팩에서는 Maven, java test runnder, project manager, defugger 와 같은 기능이 포함되어 있다.(사진 2, 3번)
+
+2. spring boot용 확장 패키지를 설치하기 위해 spring boot extension pack을 검색하여 확장팩을 설치.(사진 4번)
+    이 확정팩에서는 spring boot tools, spring initializer, spirng boot dashboard 와 같은 기능이 포함되어 있다.(사진 5, 6번)
+
+3. 이제 vscode로 java project를 실행하기 위해 좌측 탐색기에서 Create Java Project에서(사진 7번) Spring Boot를 선택(사진 8번)하면 Maven 혹은 Gradle 을 선택할 수 있는데 이번 프로젝트에서는 Gradle을 
+    사용하여 진행하기로 결정했다.(사진 9번)
+
+    다음으로는 스냅샷 버전을 선택해야 하는데 일단은 제일 위에 있던 2.7.4 버전을 선택하기로 했다.(사진 10번)
+    언어는 당연하게도 java를 선택하고(사진 11번) 그룹 ID는 간단하게 base로 결정하고(사진 12번) 아티펙트 ID는 base_project로 하였다.(사진 13번)
+
+    다음으로는 War(사진 14번, spring boot를 사용하기 위해서는 ) - 17(사진 15번, java 버전) 
+        다음으로는 우선 기본적으로 spring boot를 사용하기 위해 Spring Boot DevTools를 선택하고, 웹 개발을 위해 Spring Web을 선택(사진 16번)하여 종속성을 선택할 수 있도록 한다.
+
+    이렇게하면 파일을 저장한 디렉토리를 선택하게 되는데 로컬 디스크(C:)의 workspace 폴더를 선택했다.(사진 18번)
+
+    설정이 완료되면 사진 19번과 같이 파일을 open할 수 있게 되며 사진 20번과 같이 vscode에서 spring boot를 이용할 수 있게 된다.
+
+4. src - main -java에 들어가보면 사진 21번과 같이 위에서 만들었던 base_project 패키지 안에 BaseProjectApplication.java가 생성됨을 볼 수 있다(사진 22번)
+    또한, 저장 디렉토리로 설정한 workspace 폴더에도 프로젝트 파일이 생성됨을 볼 수 있다.(사진 23번)
+
+5. 현재 프로젝트에서 Gradle로 할 수 있는 작업을 확인하기 위해 'ctrl+`'를 눌러 터미널을 불러와 ./gradlew tasks를 입력하면(사진 29번) 사진 30번과 같이 spring boot application을 실행할 수 있다는 사실을 알 수 있다.
+    이제 터미널창에 ./gradlew bootRun 을 입력하면 사진 31번과 같이 spring boot가 실행이 되고 8080 포트로 들어가면 사진 32번과 같이 진행됨을 볼 수 있다.(인덱스 페이지가 존재하지 않기 때문에 404 에러 발생)
+
+6. 이번에는 hello world! 를 출력해보기 위해 base_project 패키지에 HelloController.java를 생성하고 @RestController 어노테이션을 사용하여 데이터를 반환하도록 코드를 작성한다.(사진 33번)
+    웹 브라우저로 출력하기 전, context path를 설정하기 위해 application.yml(사진 34번)에서 context-path를 설정한다.(사진 35번, 혹시 모를 시큐리티 사용을 위해 /base 가 아닌 /를 사용)
+        (application.properties 파일이 원래 존재하지만, 편의성을 위해 .yml 파일로 변경하여 사용한다.)
+
+7. spring boot를 실행하기 위해서는 우상단에 위치한 삼각형 아이콘을 선택하여 java로 실행하게 되면(사진 36번) 어떤 어플리케이션을 실행하는지 정할 수 있게 되고(사진 37번)
+    base_project를 선택하게 되면 사진 38번과 같이 spring이 실행된 것을 확인할 수 있다.
+
+8. spring boot가 문제없이 작동했다면 사진 39번과 같이 'hello world!'가 정상적으로 출력된 것을 확인할 수 있다.
+
+9. MVC 패턴에 의해 view 화면 호출.
+    bulid.gradle 파일(사진 40번)에 view 화면에 사용할 템플릿 엔진을 위한 라이브러리를 추가해야 한다.(사진 41번) 
+
+    application.yml에서 prefix와 suffix 설정(사진 42번, 자세한 설명은 blog 프로젝트의 '6. yml 설정' 참조)
+
+    // MVC 패턴을 사용하기 위해 HelloController.java에서 @RestController 어노테이션을 @Controller 어노테이션으로 변경(사진 43번) -> 이 경우에는 MIME 를 사용하는 것인데 일단은 사용하지 않음
+
+10. DB를 연동시키기 위해서 사진 44번과 같이 application.yml에 코드를 작성한다.(코드는 blog 프로젝트에서 사용하던 것을 가져와서 사용.)
+
+11. Gradle에서 JPA를 사용하기 위해서는 사진 45번과 같이 build.gradle에 코드를 작성.
+    (runtimeOnly 'org.mariadb.jdbc:mariadb-java-client' 부분은 Mariadb를 사용하기 위해 필요한 부분이다.)
