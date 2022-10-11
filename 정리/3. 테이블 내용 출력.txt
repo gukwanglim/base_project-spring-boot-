@@ -4,7 +4,8 @@
     해당 패키지(repositroy)에 생성된 클래스는 JpaRepository를 상속받아 사용하게 되는데 사진 2번과 같이 JpaRepository에 에러가 발생했다.
         그 이유는 데이터 타입이 interface가 아닌 class로 했기 때문이다.(사진 3번) 
         (JpaRepository<>는 interface, 사진 4번)
-         (JpaRepository<User, Integer>와 같은 형태로 사용되며 User 테이블의 프라이머리키는 숫자라는 뜻이다.)
+         (JpaRepository<User, Integer>와 같은 형태로 사용되며 User 테이블의 프라이머리키는 숫자라는 뜻이다.
+            해당 JpaRepository는 User table이 관리하는 저장소(Repository)이다.)
 
 2. 이제 데이터 베이스에서 가져온 정보를 브라우저에 띄우기 위해서 사진 5번과 같이 HelloController.java에 @GetMapping 어노테이션을 사용한다.
     @PathVariable을 사용하여 int로 id를 받을 수 있게 하여 userRepositroy에 존재하는 id를 찾는 것이다.(Mapping 주소에 {id}로 받아와야한다.)

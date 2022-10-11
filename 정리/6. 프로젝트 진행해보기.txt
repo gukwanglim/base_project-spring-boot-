@@ -1,0 +1,46 @@
+1. 사진 1번은 프로젝트 진행해 필요한 list.html 파일로 Thymeleaf를 사용하여 만들어졌다.
+    간단한게 테이블의 형태로 userNo, userNm, userId, userPw 의 데이터를 받아 사용되는 것으로 기존 프로젝트 이해를 위해 만들었던 user 테이블은 그대로 두고 
+    새롭게 project 테이블을 생성하여 적용시키기로 결정했다. (사진 2번)
+    (생성된 데이터 베이스 테이블은 사진 3번)
+
+2. ajax로 작성된 내용을 살펴보면 post 메핑 "/user"로 값을 받게 되면 저장이 실행되고, put 메핑 "/user"로 받게 되면 수정이 실행된다.(사진 4번)
+    (post 메핑의 경우는 insert, put 메핑의 경우는 update)
+
+    마찬가지로 delete 메핑 "/user"로 받게 되면 삭제가 실행된다.(사진 5번)
+
+    따라서 controller.java 파일에서 각각에 맞는 메핑의 코드를 작성하면 실행된다고 판단되어 프로젝트를 진행했다.
+
+3. ProjectController.java를 생선한 후, 사진 6번과 같이 코드를 작성했다.
+    조회를 위한 @GetMapping, 저장을 위한 @PostMapping, 수정을 위한 @PutMapping을 사용했으며 삭제를 위한 @DeleteMapping에서는 오류가 발생하여 잠시 미뤄두고 작성을 진행했다.
+    간단하게 생각하여 각각의 메핑만 주고 return으로 "list" html을 받게 만들었다.(하지만 @PutMapping의 경우는 데이터 타입을 return해야지 오류가 발생하지 않았다.)
+
+    내 생각으로는 이미 ajax에서 get, post, put, delete가 정해져 있기 때문에 이렇게만 한다면 데이터 베이스에 저장될 것이라 생각했다.
+    하지만 실제 spring을 실행해보니 list.html 브라우저만 띄우고 데이터 베이스에 값을 저장하지 못했다.
+    
+4. 시도를 해보고 깨달은 내용
+    blog 프로젝트를 살펴보면 ~Controller.java에서는 @GetMapping 만 사용이 된다.(@Controller를 사용)
+    @PostMapping, @PutMapping, @DeleteMapping의 경우는 controller 패키지 안에 api 패키지를 만들어 ~ApiController.java를 생성하여 메핑하게 된다.(@RestController를 사용)
+    ~ApiController.java에서는 동작하게 되는 함수를 지정하여 사용하는데 이것은 service 패키지 안에 ~Service.java를 생성하여 함수를 정의하게 된다.
+    또한, ~ApiController.java에서 데이터 타입으로 사용하기 위해 dto 패키지에 ResponseDto.java를 생성한다.(제네릭 사용)
+
+    위 과정을 마치면 가능할지도 모른다고 생각된다.
+
+5. ajax에서 "/user"으로 데이터(json)를 받아오는 것이라 판단하여 controller 패키지 안에 api 패키지를 생성.
+    api 패키지에서는 UserApiController.java를 생성하여 데이터만 return하기에 @RestController를 사용하며, json을 받아오는 것으로 @RequestBody 사용 (사진 7번)
+    예상대로라면 저장이 완료된 후, "저장되었습니다."라는 alert 뒤로 1 이 떠야하는데 뜨지 않음.
+
+    일단은 해야할 것들을 계속 진행. 
+    return값을 status로 확인하기 위해서 dto 패키지와 ResponseDto 클래스를 생성. (사진 8번)
+
+    ResponseDto.java에서 생성된 제네릭은 UserApiController.java에서 retrun 값으로 사용.(사진 9번)
+
+    하지만 시도해도 작동하지 않음. 사용법을 모르겠다. 차라리 ajax까지 직접 만들게 된다면 가능할지도
+
+6. 문제가 발생한 부분을 찾았다. 현재 list.html에 적혀있는 axios는 RESTful API 방식을 사용하는 것이고, blog 프로젝트에서는 일반 API를 사용하고 있다.
+    두 방식의 차이점을 정확히 깨닫지 못한 상태로 사용해서 문제가 발생한 것으로 보인다. 
+
+    간단하게 API 방식과 RESTful API 방식을 설명하자면
+        - API : Method(Get, Post, Put, Delete)를 사용하지 않고 주소(Path)를 이용하여 CRUD를 진행한다.(ex: user의 정보를 수정하기 위해서 주소를 user/update 와 같은 식으로 보내 처리한다.)
+        - RESTful API : Method를 사용하여 CRUD를 진행한다.(ex: insert, select, update, delete를 Method만 정의하여 사용한다.)
+
+    또한, axios에 대해 설명하자면 뷰에서 권고하는 HTTP 통신 라이브러리로 Promise 기반의 HTTP 통신 라이브러리이며 상대적으로 다른 HTTP 통신 라이브러리들에 비해 문서화가 잘되어 있고 API가 다양하다.

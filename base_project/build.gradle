@@ -33,7 +33,6 @@ dependencies {
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
 	// thymeleaf 사용
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'

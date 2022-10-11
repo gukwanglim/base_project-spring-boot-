@@ -1,0 +1,105 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <!-- TUI Grid -->
+        <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
+        <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+        <!-- Axios -->
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+        <title>IHVMS</title>
+	</head>
+    <body>
+        <input id="userId" placeholder="아이디를 입력하세요.">
+        <button id="searchBtn">조회</button>
+        <button id="addBtn">추가</button>
+        <button id="saveBtn">저장</button>
+        <button id="deletBtn">삭제</button>
+        <div id="grid"></div>
+        <script>
+            // GRID 를 생성한다.
+            var grid = new tui.Grid( {
+                el: document.getElementById('grid'),
+                rowHeaders: ['checkbox'],
+                columns: [
+                    { header: '번호', name: 'userNo' },
+                    { header: '이름', name: 'userNm', editor: 'text' },
+                    { header: '아이디', name: 'userId', editor: 'text' },
+                    { header: '비밀번호', name: 'userPw', editor: 'text' },
+                ]
+            });
+            
+            //조회
+            document.getElementById('searchBtn').onclick = function() {
+                let params = {userId: document.getElementById('userId').value};
+                axios.get('/user', {params}).then(function(response) {
+                    grid.resetData(response.data);
+                }).catch(function(error) {
+                    if (error.response) {
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    }
+                });
+            }
+            document.getElementById('searchBtn').click();
+            
+            //추가
+            document.getElementById('addBtn').onclick = function() {
+                grid.appendRow({});
+            }
+
+            //저장
+            document.getElementById('saveBtn').onclick = async function() {
+                let userDtos = grid.getCheckedRows();
+                if(userDtos?.length) {
+                    for(let userDto of userDtos) {
+                        if(userDto.userNo) {
+                            await axios.post('/user', userDto).then(function(response) {
+                                console.log(response);
+                            }).catch(function(error) {
+                                if(error.response) {
+                                    console.log(error.response.status);
+                                    console.log(error.response.headers);
+                                }
+                            });
+                        } else {
+                            await axios.put('/user', userDto).then(function(response) {
+                                console.log(response);
+                            }).catch(function(error) {
+                                if(error.response) {
+                                    console.log(error.response.status);
+                                    console.log(error.response.headers);
+                                }
+                            });
+                        }
+                    }
+                    alert("저장되었습니다.");
+                    document.getElementById('searchBtn').click();
+                } else {
+                    alert("선택한 행이 없습니다.");
+                }
+            }
+
+            //삭제
+            document.getElementById('deletBtn').onclick = async function() {
+                let userDtos = grid.getCheckedRows();
+                if(userDtos?.length) {
+                    for(let userDto of userDtos) {
+                        await axios.delete('/user', {data: userDto}).then(function(response) {
+                            console.log(response);
+                        }).catch(function(error) {
+                            if(error.response) {
+                                console.log(error.response.status);
+                                console.log(error.response.headers);
+                            }
+                        });
+                    }
+                    alert("삭제되었습니다.");
+                    document.getElementById('searchBtn').click();
+                } else {
+                    alert("선택한 행이 없습니다.");
+                }
+            }
+        </script>
+    </body>
+</html>

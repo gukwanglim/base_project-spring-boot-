@@ -11,7 +11,14 @@
 <body>
     <h3>Hello SpringBoot with Template!!</h3>
 
-    <h4 th:text="${testSTR}"></h4>
+    <!-- <h4 th:text="${testSTR}"></h4> -->
+
+    <tr th:each="p : ${project}">
+        <td th:text="*{p.userNo}"></td>
+        <td th:text="*{p.userNm}"></td>
+        <td th:text="*{p.userId}"></td>
+        <td th:text="*{p.userPw}"></td>
+    </tr>
 
 </body>
 

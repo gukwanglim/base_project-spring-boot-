@@ -1,0 +1,14 @@
+1. 기본적인 흐름을 보자면, 
+    html 생성 - controller 동작 - controller에서 동작하기 위한 엔티티 생성 - repositroy에서 JpaRepository 상속 - service에서 기능 구현 - 구현된 기능을 가지고 controller에서 실행
+    이라고 할 수 있으며 여기서 dto를 생성하여 controller에서 필요한 데이터를 받아오는 것이 좋다.
+
+2. 먼저, list.html에 맞는 테이블을 생성하기 위해 model 패키지에 Project.java를 생성하여 userNo, userNm, userId, userPw의 필드를 가지게 만든다.(사진 1번)
+    생성한 project 모델을 사용하기 위해 repositroy에서 ProjectRepositroy.java를 생성하여 JpaRepository를 상속한다.(사진 2번)
+
+    데이터 베이스에 값을 저장하는 메소드를 만들기 위해 sevice에서 ProjectService.java를 생성하여 @Service 어노테이션을 주고, @Transactional 어노테이션을 사용하여 메서드를 생성한다.
+        이때, 생성된 메소들에서 받아오게 될 정보는 '메소드(int id, User user)와 같이 받아올 수 있는데 DTO를 사용하여 받아오는 방법도 존재한다.
+            DTO : DTO(Data Transfer Object)는 데이터를 전달하기 위한 객체이다. 
+                계층간 데이터를 주고 받을 때, 데이터를 담아서 전달하는 바구니로 생각할 수 있다. 여러 레이어 사이에서 DTO를 사용할 수 있지만, 
+                주로 View와 Controller 사이에서 데이터를 주고 받을 때 활용한다.
+
+        때문에 dto 패키지에서 ProjectDto.java를 생성하고 저장에 필요한 내용들을 작성한다. (사진 3번)
