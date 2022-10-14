@@ -1,6 +1,7 @@
 package com.base.base_project.service;
 
 import java.util.List;
+import java.util.stream.Collector;
 
 import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,25 @@ public class ProjectService {
     } 
 
     @Transactional
-    public void 저장(ProjectDto projectDto) {
-        // projectRepositroy.save(null);
-        projectRepositroy.mSave(projectDto.getUserNm(), projectDto.getUserId(), projectDto.getUserPw());
+    public List<ProjectDto> 찾기(String projectId) {
+        return projectRepositroy.findByUserId("%" + projectId + "%").stream().map(project -> new ProjectDto(project)).collect(Collector.toList());
+    }
+
+    // @Transactional
+    // public void 저장(ProjectDto projectDto) {
+    //     projectRepositroy.save(projectDto.toEntity());
+    //     // projectRepositroy.mSave(projectDto.getUserNm(), projectDto.getUserId(), projectDto.getUserPw());
+    // }
+
+    @Transactional
+    public ProjectDto 저장(ProjectDto projectDto) {
+        return new ProjectDto(projectRepositroy.save(projectDto.toEntity()));
+    }
+
+    @Transactional
+    public ProjectDto 삭제(ProjectDto projectDto) {
+        projectRepositroy.deleteById(projectDto.getUserNo());
+        return projectDto;
     }
     
 }
