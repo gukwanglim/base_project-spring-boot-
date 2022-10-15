@@ -1,0 +1,62 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+        <title>Project_join</title>
+	</head>
+    <body>
+        <h3>join now</h3>
+
+        <div class="container">
+            <form>
+                <div class="form-group">
+                    <label for="username"> ID :</label> 
+                    <input type="text" class="form-control" placeholder="Enter userId" id="userId">
+                </div>
+
+                <div class="form-group">
+                    <label for="username"> Name :</label> 
+                    <input type="text" class="form-control" placeholder="Enter userNm" id="userNm">
+                </div>
+        
+                <div class="form-group">
+                    <label for="password"> Password :</label> 
+                    <input type="password" class="form-control" placeholder="Enter userPw" id="userPw">
+                </div>
+            </form>
+            <button id="saveBtn" class="btn btn-primary">Submit</button>
+        </div>
+
+        <script>
+
+        document.getElementById('saveBtn').onclick = async function() {
+            // console.log("누름");
+            let userDtos = {
+                userId: document.getElementById('userId').value,
+                userNm: document.getElementById('userNm').value,
+                userPw: document.getElementById('userPw').value
+                };
+                console.log(userDtos.userId);
+                console.log(userDtos.userNm);
+                console.log(userDtos.userPw);
+                if(userDtos.userId & userDtos.userNm & userDtos.userNm) {
+                            await axios.post('/user', userDtos).then(function(response) {
+                                console.log(response);
+                            }).catch(function(error) {
+                                if(error.response) {
+                                    console.log(error.response.status);
+                                    console.log(error.response.headers);
+                                }
+                            }); 
+                    alert("저장되었습니다.");
+            } else {
+                    alert("정보를 모두 기입해주세요.");
+            }
+        }
+
+        </script>
+
+    </body>
+</html>
